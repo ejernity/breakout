@@ -6,12 +6,15 @@ public class Paddle : MonoBehaviour
 
     private Rigidbody2D rb2d;
     private Vector3 startingPosition;
+    private Vector3 initialScale;
     private float moveSpeed = 8f;
 
     private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         GameManager.instance.onLostLife += ResetPaddle;
+        GameManager.instance.onBiggerPaddlePowerup += ApplyBiggerPaddle;
+        initialScale = transform.localScale;
         startingPosition = transform.position;
     }
 
@@ -44,10 +47,19 @@ public class Paddle : MonoBehaviour
     private void ResetPaddle()
     {
         transform.position = startingPosition;
+        transform.localScale = initialScale;
+    }
+
+    private void ApplyBiggerPaddle()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x += 0.3f;
+        transform.localScale = scale;
     }
 
     private void OnDestroy()
     {
         GameManager.instance.onLostLife -= ResetPaddle;
+        GameManager.instance.onBiggerPaddlePowerup -= ApplyBiggerPaddle;
     }
 }

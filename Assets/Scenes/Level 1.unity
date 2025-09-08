@@ -181,6 +181,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 98328563919769401, guid: d2d129d3de2a47d4d85e6fb739c11840, type: 3}
   m_PrefabInstance: {fileID: 24220759}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &47242149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 47242151}
+  - component: {fileID: 47242150}
+  m_Layer: 0
+  m_Name: PowerUpManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &47242150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47242149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb2c65df14942c41a2fba56e0b7d7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createPowerUpPercentage: 0.5
+  powerUpPrefabs:
+  - {fileID: 564521939131107397, guid: ca855c6c82facc744bbe07ea6f4ced75, type: 3}
+--- !u!4 &47242151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47242149}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &51106474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2065,7 +2112,7 @@ GameObject:
   - component: {fileID: 678127505}
   - component: {fileID: 678127507}
   - component: {fileID: 678127506}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2711,10 +2758,10 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 00b00ca3d659f204c903b4622a03f3a1, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5571,7 +5618,7 @@ GameObject:
   - component: {fileID: 2056800398}
   m_Layer: 0
   m_Name: DeadZone
-  m_TagString: Untagged
+  m_TagString: DeadZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5977,6 +6024,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1425414914}
+  - {fileID: 47242151}
   - {fileID: 1499837107}
   - {fileID: 619394802}
   - {fileID: 2079253456}

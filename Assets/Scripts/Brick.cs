@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Brick : MonoBehaviour
 {
@@ -26,14 +25,20 @@ public class Brick : MonoBehaviour
 
         if (currentHitPoints <= 0)
         {
-            GameManager.instance.onBrickDestroyed?.Invoke();
-            Destroy(gameObject);
+            DestroyBrick();
         }
         else
         {
             Color color = spriteRenderer.color;
-            color.a = (float) currentHitPoints / totalHitPoints;
+            color.a = (float)currentHitPoints / totalHitPoints;
             spriteRenderer.color = color;
         }
+    }
+
+    public void DestroyBrick()
+    {
+        GameManager.instance.onBrickDestroyed?.Invoke();
+        PowerUpManager.instance.TrySpawnPowerUp(transform.position);
+        Destroy(gameObject);
     }
 }

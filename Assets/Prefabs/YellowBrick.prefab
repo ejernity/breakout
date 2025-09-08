@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6947459051381358789}
   - component: {fileID: -3156487146466766528}
   - component: {fileID: 7360378238116959352}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: YellowBrick
   m_TagString: Brick
   m_Icon: {fileID: 0}

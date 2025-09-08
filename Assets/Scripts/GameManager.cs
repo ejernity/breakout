@@ -15,13 +15,22 @@ public class GameManager : MonoBehaviour
     [Header("Audio Reference")]
     public AudioManager audioManager;
 
+    [Header("Basic Events")]
     public Action onBrickHit;
     public Action onBrickDestroyed;
     public Action onLostLife;
     public Action onPointWon;
 
+    [Header("PowerUps Events")]
+    public Action onFastBallPowerup;
+    public Action onSlowBallPowerup;
+    public Action onBiggerPaddlePowerup;
+    public Action onFireballPowerupBegin;
+    public Action onFireballPowerupEnd;
+
     private int score = 0;
     private int lifes = 3;
+    private int maxLifes = 3;
 
     private int totalBricks;
     private int totalScenes;
@@ -151,5 +160,11 @@ public class GameManager : MonoBehaviour
     private void OnBrickHitSound()
     {
         audioManager.PlayBrickHitSound();
+    }
+
+    public void AddExtraLife()
+    {
+        if (lifes < maxLifes)
+            lifes++;
     }
 }

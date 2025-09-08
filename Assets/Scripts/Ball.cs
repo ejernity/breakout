@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
@@ -7,9 +8,11 @@ public class Ball : MonoBehaviour
     private Vector3 startingPosition;
     private float anglePercentage = 0.67f;
     private float moveSpeed = 8f;
+    private float powerUpFactor = 1f;
     public float minXVelocity = 2f;      // Ελάχιστη ταχύτητα στον Χ για να μην κολλάει κάθετα
     public float minΥVelocity = 2f;      // Ελάχιστη ταχύτητα στον Χ για να μην κολλάει κάθετα
     private bool isMoving;
+    private bool isFireball;
 
     private void Awake()
     {
@@ -21,8 +24,12 @@ public class Ball : MonoBehaviour
     void Start()
     {
         //Debug.Log($"Ball:Start:Level{SceneManager.GetActiveScene().name}");
+        isFireball = false;
         startingPosition = transform.position;
         GameManager.instance.onLostLife += ResetBall;
+        GameManager.instance.onFastBallPowerup += ApplyFastBall;
+        GameManager.instance.onSlowBallPowerup += ApplySlowBall;
+        GameManager.instance.onFireballPowerupBegin += ApplyFireball;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -58,9 +65,12 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Debug.Log($"Trigger with {collision.name}");
+
         DeadZone deadZone = collision.GetComponent<DeadZone>();
         if (deadZone)
         {
+            powerUpFactor = 1f;
             GameManager.instance.OnDeadZoneEnter();
             GameManager.instance.onLostLife?.Invoke();
         }
@@ -70,9 +80,23 @@ public class Ball : MonoBehaviour
     {
         // ---- 0. Λογική αν χτυπήσει στο Brick ----
         Brick brick = collision.collider.GetComponent<Brick>();
-        if (brick)
+        if (brick != null)
         {
-            brick.OnBrickHit();
+            if (isFireball)
+            {
+                // Σπάσε το brick
+                brick.DestroyBrick();
+
+                // Πάρε την τρέχουσα κατεύθυνση και κράτα την ίδια ταχύτητα
+                Vector2 currentVel = rb2d.linearVelocity.normalized * moveSpeed * powerUpFactor;
+
+                // Επανέφερε το velocity στο επόμενο FixedUpdate
+                StartCoroutine(RestoreVelocityNextFrame(currentVel));
+
+                return; // σταματάμε εδώ, δεν συνεχίζει η υπόλοιπη λογική collision
+            }
+            else
+                brick.OnBrickHit();
         }
 
         // ---- 1. Σπάσιμο κάθετης τροχιάς ----
@@ -82,13 +106,13 @@ public class Ball : MonoBehaviour
         {
             // Αν η μπάλα πάει πολύ κάθετα, δίνουμε ένα bump στον Χ
             v.x = Mathf.Sign(v.x) * minXVelocity;
-            rb2d.linearVelocity = v.normalized * moveSpeed;
+            rb2d.linearVelocity = v.normalized * moveSpeed * powerUpFactor;
         }
 
         if (Mathf.Abs(v.y) < minΥVelocity)
         {
             v.y = Mathf.Sign(v.y) * minΥVelocity;
-            rb2d.linearVelocity = v.normalized * moveSpeed;
+            rb2d.linearVelocity = v.normalized * moveSpeed * powerUpFactor;
         }
 
         // ---- 2. Ειδική λογική αν χτυπήσει στο Paddle ----
@@ -105,7 +129,7 @@ public class Ball : MonoBehaviour
 
             // Υπολογίζουμε νέα κατεύθυνση
             Vector2 dir = new Vector2(normalizedOffset, 1).normalized;
-            rb2d.linearVelocity = dir * moveSpeed;
+            rb2d.linearVelocity = dir * moveSpeed * powerUpFactor;
 
             // Παίξε τον ήχο του collision σε paddle
             GameManager.instance.audioManager.PlayPaddleHitSound();
@@ -114,10 +138,53 @@ public class Ball : MonoBehaviour
 
     public bool IsMoving { get { return isMoving; } }
 
+    private void ApplyFastBall()
+    {
+        powerUpFactor += 0.1f;
+    }
+
+    private void ApplySlowBall()
+    {
+        powerUpFactor -= 0.1f;
+    }
+
+    private void ApplyFireball()
+    {
+        isFireball = true;
+
+        // Apply effect, sprite, or just change color of the ball
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+            sprite.color = Color.red;
+
+        Invoke("DisableFireball", 10f);
+    }
+
+    private void DisableFireball()
+    {
+        isFireball = false;
+
+        // Revert sprite color
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        sprite.color = Color.white;
+
+        GameManager.instance.onFireballPowerupEnd?.Invoke();
+        //Debug.Log("Fireball disabled!");
+    }
+
+    private IEnumerator RestoreVelocityNextFrame(Vector2 vel)
+    {
+        yield return new WaitForFixedUpdate();
+        rb2d.linearVelocity = vel;
+    }
+
     private void OnDestroy()
     {
         //Debug.Log("Ball destroyed!");
         SceneManager.sceneLoaded -= OnSceneLoaded;
         GameManager.instance.onLostLife -= ResetBall;
+        GameManager.instance.onFastBallPowerup -= ApplyFastBall;
+        GameManager.instance.onSlowBallPowerup -= ApplySlowBall;
+        GameManager.instance.onFireballPowerupBegin -= ApplyFireball;
     }
 }
