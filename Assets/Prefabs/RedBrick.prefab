@@ -175,3 +175,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64fc8e306269e7e4abe20c62831f1fe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  brickExplosionParticleEffect: {fileID: 7363042226836465440, guid: ec3c62df093972b47ac099c8f2d75353, type: 3}

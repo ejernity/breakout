@@ -6,6 +6,8 @@ public class Brick : MonoBehaviour
     private int totalHitPoints;
     private SpriteRenderer spriteRenderer;
 
+    public GameObject brickExplosionParticleEffect;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -37,6 +39,7 @@ public class Brick : MonoBehaviour
 
     public void DestroyBrick()
     {
+        Instantiate(brickExplosionParticleEffect, this.transform.position, Quaternion.identity);
         GameManager.instance.onBrickDestroyed?.Invoke();
         PowerUpManager.instance.TrySpawnPowerUp(transform.position);
         Destroy(gameObject);
