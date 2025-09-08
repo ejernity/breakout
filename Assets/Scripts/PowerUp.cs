@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum PowerUpType { ExtraLife, BiggerPaddle, SlowBall, FastBall, Fireball }
+public enum PowerUpType { ExtraLife, BiggerPaddle, SlowBall, FastBall }
 
 public class PowerUp : MonoBehaviour
 {

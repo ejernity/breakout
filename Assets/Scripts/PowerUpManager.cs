@@ -9,8 +9,6 @@ public class PowerUpManager : MonoBehaviour
 
     public GameObject[] powerUpPrefabs;
 
-    private bool isFireballPowerupActive = false;
-
     private void Awake()
     {
         instance = this;
@@ -18,7 +16,6 @@ public class PowerUpManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.onFireballPowerupEnd += DisableFireball;
         for (int i = 0; i < powerUpPrefabs.Length; i++)
         {
             Debug.Log($"Prefab {powerUpPrefabs[i].name} loaded...");
@@ -27,7 +24,7 @@ public class PowerUpManager : MonoBehaviour
 
     public void TrySpawnPowerUp(Vector3 powerUpPosition)
     {
-        if (Random.value < createPowerUpPercentage && !isFireballPowerupActive)
+        if (Random.value < createPowerUpPercentage)
         {
             int index = Random.Range(0, powerUpPrefabs.Length);
             Debug.Log($"Instantiate object {powerUpPrefabs[index].name}");
@@ -53,9 +50,6 @@ public class PowerUpManager : MonoBehaviour
             case PowerUpType.BiggerPaddle:
                 ApplyBiggerPaddle();
                 break;
-            case PowerUpType.Fireball:
-                ApplyFireball();
-                break;
         }
     }
 
@@ -77,24 +71,5 @@ public class PowerUpManager : MonoBehaviour
     private void ApplyBiggerPaddle()
     {
         GameManager.instance.onBiggerPaddlePowerup?.Invoke();
-    }
-
-    private void ApplyFireball()
-    {
-        if (!isFireballPowerupActive)
-        {
-            GameManager.instance.onFireballPowerupBegin?.Invoke();
-            isFireballPowerupActive = true;
-        }
-    }
-
-    private void DisableFireball()
-    {
-        isFireballPowerupActive = false;
-    }
-
-    private void OnDestroy()
-    {
-        GameManager.instance.onFireballPowerupEnd -= DisableFireball;
     }
 }

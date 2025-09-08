@@ -212,7 +212,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   createPowerUpPercentage: 0.5
   powerUpPrefabs:
-  - {fileID: 564521939131107397, guid: ca855c6c82facc744bbe07ea6f4ced75, type: 3}
+  - {fileID: 564521939131107397, guid: 51992a1d65bcde94dacd76d8f902dd4b, type: 3}
+  - {fileID: 564521939131107397, guid: 7db323a26a3d7cf469367d4f312173eb, type: 3}
+  - {fileID: 564521939131107397, guid: e3e611bd87d2c5248bd7adc5488e51a4, type: 3}
+  - {fileID: 564521939131107397, guid: cea7f691608a6b949bc0b6a200545240, type: 3}
 --- !u!4 &47242151
 Transform:
   m_ObjectHideFlags: 0

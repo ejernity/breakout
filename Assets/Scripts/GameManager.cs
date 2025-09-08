@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
     public Action onFastBallPowerup;
     public Action onSlowBallPowerup;
     public Action onBiggerPaddlePowerup;
-    public Action onFireballPowerupBegin;
-    public Action onFireballPowerupEnd;
 
     private int score = 0;
     private int lifes = 3;
